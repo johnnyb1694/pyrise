@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "pyrise"
+version = "0.1.0"
+description = "A daily planning service for personal use only"
+authors = ["johnnyb1694 <johnnyb1694@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "pyrise" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
