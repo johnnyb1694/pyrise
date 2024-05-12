@@ -1,10 +1,37 @@
-"""
-Contains functionality to retrieve and process recipes sourced from: 
-https://developer.edamam.com/edamam-docs-recipe-api
-"""
+"""Contains functionality to retrieve and process recipes.
 
+Ultimate source: https://developer.edamam.com/edamam-docs-recipe-api
+"""
 import requests
 import random
+
+
+def _sample_hits(
+    hits: dict,
+    n: int
+) -> list[dict]:
+    """Randomly samples extracted hits (recipes).
+
+    Args:
+        hits (dict): list of recipes that were produced by the API response
+        n (int): number of articles to extract
+    """
+    indices = random.sample(range(len(hits)), n)
+    random_subset = [hits[idx] for idx in indices]
+    return random_subset
+
+
+def _extract_recipes(
+    hits: dict
+) -> list[dict]:
+    """Extracts the recipe elements of each 'hit' and filters fields on recipe title and URL.
+
+    Args:
+        hits (dict): list of recipes that were produced by the API response
+    """
+    recipes = [hit["recipe"] for hit in hits]
+    recipes_short = [{"title": recipe["label"], "url": recipe["url"]} for recipe in recipes]
+    return recipes_short
 
 
 def get_recipes(
@@ -14,19 +41,16 @@ def get_recipes(
     max_calories: int = 800,
     fodmap: bool = True,
     n: int | None = 3
-) -> dict:
-    """
-    Retrieves `n` random (or all, if unspecified) recipes from the `edamam` API service.
-
-    Returns the recipe title and URL.
+) -> list[dict]:
+    """Retrieves `n` random (or all, if unspecified) recipes from the `edamam` API service.
 
     Args:
         app_id (str): application key
         app_key (str): API key
         min_calories (int): minimum number of calories
         max_calories (int): maximum number of calories
-        fodmap (bool): indicates whether recipes should conform to FODMAP standards or not
-        n (int | None, optional): optionally controls the number of recipes. Defaults to None.
+        fodmap (bool): indicates whether recipes should comply with FODMAP standards or not
+        n (int | None, optional): optionally controls the number of recipes. Defaults to `3`.
     """
     params = {
         "type": "public",
@@ -43,11 +67,9 @@ def get_recipes(
     deserialised = response.json()
     hits = deserialised["hits"]
     if n:
-        subset = random.sample(range(len(hits)), n)
-        hits = [hits[idx] for idx in subset]
-    recipes = [hit["recipe"] for hit in hits]
-    recipe_meta = [{"title": recipe["label"], "url": recipe["url"]} for recipe in recipes]
-    return recipe_meta
+        hits = _sample_hits(hits, n)
+    recipes = _extract_recipes(hits)
+    return recipes
 
 
 if __name__ == '__main__':
