@@ -1,0 +1,22 @@
+{# templates/mail.html #}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Mail</title>
+</head>
+
+<body>
+  <p>Rise and shine Johnny! Or should I say <em>pyrise</em> and shine!</p>
+  <h2>Recipes</h2>
+  <p>Why don't you consider making one of the following (FODMAP) recipes later this evening?</p>
+  <ul>
+  {% for recipe in recipes %}
+    <li>
+      <a href="{{ recipe.url }}">{{ recipe.title }}</a>
+    </li>
+  {% endfor %}
+  </ul>
+</body>
+</html>

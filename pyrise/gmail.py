@@ -8,6 +8,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from pathlib import Path
+from jinja2 import Environment, FileSystemLoader
 
 
 def get_gmail_access_creds(
@@ -53,6 +54,10 @@ def compose_email(
 ) -> dict[str, bytes]:
     """Construct the email message to be sent by the Python client.
 
+    The API service mandates a string-based input (hence `.decode("utf-8")`)
+    that is encoded in a Base64 format. The initial call to `.encode("utf-8")`
+    is to ensure minimal data corruption.
+
     TODO: add validation on the email recipient argument!
 
     Args:
@@ -90,6 +95,27 @@ def send_email(
         print('Email sent successfully.')
     except Exception as e:
         print('An error occurred while sending the email:', str(e))
+
+
+def generate_email_body(
+    context: dict,
+    template_root: Path = "templates",
+    template_name: str = "email.html"
+) -> str:
+    """Dynamically generate the email body (via `jinja2`)
+
+    Args:
+        context (dict): dictionary containing required data (e.g. recipes = [{...}]).
+        template_root (Path, optional): location of all templates. Defaults to "templates".
+        template_name (str, optional): name of required template. Defaults to "email.html".
+
+    Returns:
+        str: generated HTML (as a string)
+    """
+    environment = Environment(loader=FileSystemLoader(template_root))
+    email_template = environment.get_template(template_name)
+    email_body = email_template.render(context)
+    return email_body
 
 
 if __name__ == '__main__':
