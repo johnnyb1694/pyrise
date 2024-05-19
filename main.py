@@ -19,7 +19,8 @@ def main():
     creds = get_gmail_access_creds(CREDENTIALS_PATH, TOKEN_PATH)
     recipes = get_recipes(
         app_id=os.environ.get("EDAMAM_APP_ID"),
-        app_key=os.environ.get("EDAMAM_API_KEY")
+        app_key=os.environ.get("EDAMAM_API_KEY"),
+        n = 5
     )
     email_body = generate_email_body(
         context={"recipes": recipes}

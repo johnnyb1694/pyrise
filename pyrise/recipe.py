@@ -7,7 +7,7 @@ import random
 
 
 def _sample_hits(
-    hits: dict,
+    hits: list[dict],
     n: int
 ) -> list[dict]:
     """Randomly samples extracted hits (recipes).
@@ -21,8 +21,8 @@ def _sample_hits(
     return random_subset
 
 
-def _extract_recipes(
-    hits: dict
+def _extract_recipe_url(
+    hits: list[dict]
 ) -> list[dict]:
     """Extracts the recipe elements of each 'hit' and filters fields on recipe title and URL.
 
@@ -68,7 +68,7 @@ def get_recipes(
     hits = deserialised["hits"]
     if n:
         hits = _sample_hits(hits, n)
-    recipes = _extract_recipes(hits)
+    recipes = _extract_recipe_url(hits)
     return recipes
 
 

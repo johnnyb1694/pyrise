@@ -1,22 +1,33 @@
-{# templates/mail.html #}
-
+{# templates/email.html #}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Mail</title>
-</head>
-
-<body>
-  <p>Rise and shine Johnny! Or should I say <em>pyrise</em> and shine!</p>
-  <h2>Recipes</h2>
-  <p>Why don't you consider making one of the following (FODMAP) recipes later this evening?</p>
-  <ul>
-  {% for recipe in recipes %}
-    <li>
-      <a href="{{ recipe.url }}">{{ recipe.title }}</a>
-    </li>
-  {% endfor %}
-  </ul>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Mail</title>
+    <style>
+      a {
+        text-decoration: none !important;
+        color: #9b72b8 !important; /* Deep purple */
+        padding: 2px 4px; /* Adding some padding for better appearance */
+      }
+      a:hover {
+        background-color: #fafab8 !important; /* Highlight color */
+      }
+    </style>
+  </head>
+  <body>
+    <p><em>pyrise</em> and shine, Johnny! &#128013; &#127749;</p>
+    <h2>Recipes &#129368;</h2>
+    <p>
+      Why don't you consider making one of the following tasty recipes later
+      this evening?
+    </p>
+    <ul>
+      {% for recipe in recipes %}
+      <li>
+        <a href="{{ recipe.url }}">{{ recipe.title }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
 </html>
