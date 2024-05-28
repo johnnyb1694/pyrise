@@ -119,4 +119,4 @@ def generate_email_body(
 
 
 if __name__ == '__main__':
-    pass
+    get_gmail_access_creds('./auth/credentials.json', './auth/token-test.json')
