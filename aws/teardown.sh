@@ -10,6 +10,15 @@ aws lambda delete-function \
     --function-name pyrise-service \
     --output text > logs/teardown.log
 
+aws events remove-targets \
+    --rule pyrise-service-schedule \
+    --ids "1" \
+    --output text >>  logs/teardown.log
+
+aws events delete-rule \
+    --name pyrise-service-schedule \
+    --output text >> logs/teardown.log
+
 echo "**** Step: Deleting associated IAM role and attached policy ****"
 aws iam detach-role-policy \
     --role-name AWSLambdaS3Role \
