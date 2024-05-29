@@ -38,8 +38,8 @@ def get_recipes(
     app_id: str,
     app_key: str,
     min_calories: int = 400,
-    max_calories: int = 800,
-    fodmap: bool = True,
+    max_calories: int = 1000,
+    fodmap: bool = False,
     n: int | None = 3
 ) -> list[dict]:
     """Retrieves `n` random (or all, if unspecified) recipes from the `edamam` API service.
@@ -58,7 +58,8 @@ def get_recipes(
         "app_key": app_key,
         "diet": "balanced",
         "health": ("fodmap-free" if fodmap else None),
-        "calories": f"{min_calories}-{max_calories}"
+        "calories": f"{min_calories}-{max_calories}",
+        "random": True
     }
     response = requests.get(
         url="https://api.edamam.com/api/recipes/v2",
@@ -73,4 +74,7 @@ def get_recipes(
 
 
 if __name__ == '__main__':
-    pass
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    print(get_recipes(os.environ.get('EDAMAM_APP_ID'), os.environ.get('EDAMAM_API_KEY')))
