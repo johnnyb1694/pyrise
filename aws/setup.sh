@@ -44,7 +44,7 @@ aws iam create-role \
 echo "**** Step: Attaching policy (permissions) to newly created role ****"
 aws iam attach-role-policy \
     --role-name AWSLambdaS3Role \
-    --policy-arn arn:aws:iam::$AWS_ID:policy/AWSLambdaS3Policy \
+    --policy-arn arn:aws:iam::${AWS_ID}:policy/AWSLambdaS3Policy \
     --output text >> logs/setup.log
 
 echo "**** Step: Sleeping 10 seconds to allow policy to attach to role ****"
@@ -79,7 +79,7 @@ aws lambda create-function --function-name pyrise-service \
     --output text >> logs/setup.log
 
 echo "**** Step: Sleeping 10 seconds to allow function to instantiate ****"
-sleep 20
+sleep 10
 
 aws lambda update-function-configuration \
     --function-name pyrise-service \
@@ -107,10 +107,10 @@ echo '[
             "Id": "1",
             "Arn": "arn:aws:lambda:'${AWS_REGION}':'${AWS_ID}':function:pyrise-service"
         }
-      ]' > ./aws/permissions/targets.json
+      ]' > ./staging/targets.json
 aws events put-targets \
     --rule pyrise-service-schedule \
-    --targets file://aws/permissions/targets.json \
+    --targets file://staging/targets.json \
     --output text >> logs/setup.log
 
 
