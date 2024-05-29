@@ -66,9 +66,6 @@ LAYER_PUBLISH_OUTPUT=$(aws lambda publish-layer-version --layer-name pyrise-serv
     
 LAYER_VERSION=$(echo $LAYER_PUBLISH_OUTPUT | jq -r '.Version')
 
-echo "**** Step: Sleeping 10 seconds to allow layer to instantiate ****"
-sleep 20
-
 echo "**** Step: Creating Lambda function (to run the email service) ****"
 chmod u=rwx,go=r lambda_function.py
 zip -rq ./staging/function.zip templates lambda_function.py
@@ -81,11 +78,39 @@ aws lambda create-function --function-name pyrise-service \
     --timeout 60 \
     --output text >> logs/setup.log
 
+echo "**** Step: Sleeping 10 seconds to allow function to instantiate ****"
+sleep 20
+
 aws lambda update-function-configuration \
     --function-name pyrise-service \
     --environment file://auth/env.json \
     --layers "arn:aws:lambda:${AWS_REGION}:${AWS_ID}:layer:pyrise-service-layer:${LAYER_VERSION}" \
     --handler lambda_function.lambda_handler \
+    --output text >> logs/setup.log
+
+echo "**** Step: Configuring email service schedule ****"
+aws events put-rule --name pyrise-service-schedule \
+    --schedule-expression 'cron(0 9 * * ? *)' --output text >> logs/setup.log
+
+echo "**** Step: Attaching Lambda function to event ****"
+aws lambda add-permission \
+    --function-name pyrise-service \
+    --statement-id pyrise-service-schedule \
+    --action lambda:InvokeFunction \
+    --principal events.amazonaws.com \
+    --source-arn arn:aws:events:${AWS_REGION}:${AWS_ID}:rule/pyrise-service-schedule \
+    --output text >> logs/setup.log
+
+echo "**** Step: Assigning targeted Lambda function (i.e. email service) to rule ****"
+echo '[
+        {
+            "Id": "1",
+            "Arn": "arn:aws:lambda:'${AWS_REGION}':'${AWS_ID}':function:pyrise-service"
+        }
+      ]' > ./aws/permissions/targets.json
+aws events put-targets \
+    --rule pyrise-service-schedule \
+    --targets file://aws/permissions/targets.json \
     --output text >> logs/setup.log
 
 
