@@ -90,7 +90,7 @@ aws lambda update-function-configuration \
 
 echo "**** Step: Configuring email service schedule ****"
 aws events put-rule --name pyrise-service-schedule \
-    --schedule-expression 'cron(0 9 * * ? *)' --output text >> logs/setup.log
+    --schedule-expression 'cron(0 8 * * ? *)' --output text >> logs/setup.log
 
 echo "**** Step: Attaching Lambda function to event ****"
 aws lambda add-permission \

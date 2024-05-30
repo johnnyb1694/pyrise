@@ -4,7 +4,7 @@
 
 A minimalist personal newsletter service :relaxed:
 
-`pyrise` sends me a scheduled email every morning at 6:30am (GMT) with the following information,
+`pyrise` sends me a scheduled email every morning at 9am (GMT) with the following information,
 
 - Recipes to try out when the evening comes along! :bento: :pizza:
 - A 'stoic' quote of the day
