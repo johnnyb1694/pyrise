@@ -2,7 +2,7 @@
 AWS_ID=$(aws sts get-caller-identity --query Account --output text)
 
 echo "**** Step: Deleting bucket ****"
-aws s3 rm s3://pyrise --recursive --output text >> logs/teardown.log
+aws s3 rm s3://pyrise --recursive --output text > logs/teardown.log
 aws s3api delete-bucket --bucket pyrise --output text >> logs/teardown.log
 
 echo "**** Step: Removing Lambda functions & associated artifacts ****"

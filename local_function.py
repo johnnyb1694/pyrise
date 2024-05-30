@@ -4,7 +4,8 @@ from pyrise import (
     compose_email, 
     send_email, 
     generate_email_body,
-    get_recipes
+    get_recipes,
+    get_stoic_quote
 )
 from pathlib import Path
 from dotenv import load_dotenv
@@ -24,8 +25,11 @@ def local_handler():
         app_key=os.environ.get("EDAMAM_API_KEY"),
         n = 5
     )
+    
+    quote = get_stoic_quote()
+
     email_body = generate_email_body(
-        context={"recipes": recipes}
+        context={"recipes": recipes, "quote": quote},
     )
     content = compose_email(
         "pyrise - Daily Email", 

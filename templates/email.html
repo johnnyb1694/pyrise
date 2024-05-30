@@ -7,7 +7,7 @@
     <style>
       a {
         text-decoration: none !important;
-        color: #9b72b8 !important; /* Deep purple */
+        color: #729cb8 !important; /* Deep purple */
         padding: 2px 4px; /* Adding some padding for better appearance */
       }
       a:hover {
@@ -29,5 +29,12 @@
       </li>
       {% endfor %}
     </ul>
+    <h2>Quote of the Day &#127756;</h2>
+    <blockquote>
+      <p>
+        <em>{{ quote.quote }}</em>
+      </p>
+      <footer><b>{{ quote.author }}</b></footer>
+    </blockquote>
   </body>
 </html>

@@ -6,7 +6,8 @@ from pyrise import (
     compose_email, 
     send_email, 
     generate_email_body,
-    get_recipes
+    get_recipes,
+    get_stoic_quote
 )
 from dotenv import load_dotenv
 
@@ -36,9 +37,12 @@ def lambda_handler(
         n = 5
     )
 
+    log.info('Downloading stoic quote')
+    quote = get_stoic_quote()
+
     log.info('Generating dynamic email template')
     email_body = generate_email_body(
-        context={"recipes": recipes},
+        context={"recipes": recipes, "quote": quote},
         template_root="templates",
         template_name="email.html"
     )

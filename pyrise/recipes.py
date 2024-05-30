@@ -74,7 +74,4 @@ def get_recipes(
 
 
 if __name__ == '__main__':
-    import os
-    from dotenv import load_dotenv
-    load_dotenv()
-    print(get_recipes(os.environ.get('EDAMAM_APP_ID'), os.environ.get('EDAMAM_API_KEY')))
+    pass
